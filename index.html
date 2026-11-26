@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendrier de l'Avent</title>
+    <style>
+        /* Reset et mise en page générale */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Image de fond : paysage de Noël traditionnel */
+            background-image: url('noel.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: white;
+        }
+
+        h1 {
+            margin: 20px 0 30px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+            font-size: 2.5rem;
+            text-align: center;
+        }
+
+        /* Grille du calendrier */
+        .calendrier-grille {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* Style de base d'une case */
+        .case {
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            text-decoration: none;
+            user-select: none;
+        }
+
+        /* Case verrouillée (jour non atteint) */
+        .case.verrouillee {
+            background-color: rgba(178, 34, 34, 0.6);
+            border: 2px dashed rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .case.verrouillee:hover {
+            transform: scale(1.02);
+            background-color: rgba(178, 34, 34, 0.95);
+        }
+
+        /* Case disponible (jour atteint, mais pas encore ouverte) */
+        .case.disponible {
+            background-color: rgba(34, 139, 34, 0.6);
+            border: 2px solid #ffd700;
+            color: #fff;
+            animation: pulsation 2s infinite;
+        }
+
+        .case.disponible:hover {
+            transform: scale(1.06);
+        }
+
+        /* Case ouverte (reste ouverte les jours suivants) */
+        .case.ouverte {
+            background-color: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.9);
+        }
+
+        .case.ouverte::after {
+            content: "Voir le lien ➔";
+            font-size: 0.85rem;
+            margin-top: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 8px;
+            border-radius: 6px;
+            color: white;
+        }
+
+        @keyframes pulsation {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎄 Calendrier de l'Avent de la DterEst 🎄</h1>
+
+    <div class="calendrier-grille" id="calendrier"></div>
+
+    <script>
+        // 1. CONFIGURATION DES 24 LIENS URL
+        const liensCalendrier = {
+            1: "https://wikipedia.org",
+            2: "https://example.com",
+            3: "https://example.com",
+            4: "https://example.com",
+            5: "https://example.com",
+            6: "https://example.com",
+            7: "https://example.com",
+            8: "https://example.com",
+            9: "https://example.com",
+            10: "https://example.com",
+            11: "https://example.com",
+            12: "https://example.com",
+            13: "https://example.com",
+            14: "https://example.com",
+            15: "https://example.com",
+            16: "https://example.com",
+            17: "https://example.com",
+            18: "https://example.com",
+            19: "https://example.com",
+            20: "https://example.com0",
+            21: "https://example.com1",
+            22: "https://example.com2",
+            23: "https://example.com3",
+            24: "https://example.com4"
+        };
+
+        // 2. ORDRE ALÉATOIRE DES CASES
+        // Vous pouvez modifier l'ordre de ces chiffres si vous souhaitez une autre disposition
+        const ordreCases = [16, 2, 10, 15, 21, 24, 3, 20, 1, 4, 14, 22, 13, 6, 17, 8, 19, 18, 9, 5, 11, 12, 23, 7];
+
+        // 3. GESTION DE LA DATE
+        const aujourdhui = new Date();
+        const moisActuel = aujourdhui.getMonth(); // Décembre = 11
+        const jourActuel = aujourdhui.getDate();
+
+        // /!\ ASTUCE POUR TESTER AVANT DÉCEMBRE /!\
+        // Décommentez la ligne suivante pour simuler le 10 décembre :
+        const jourMaxAutorise = 10; 
+        
+        //const jourMaxAutorise = (moisActuel === 11) ? jourActuel : 0;
+
+        // 4. MÉMOIRE DES CASES OUVERTES
+        let casesOuvertes = JSON.parse(localStorage.getItem('avent_cases_ouvertes')) || [];
+        const conteneur = document.getElementById('calendrier');
+
+        // 5. GÉNÉRATION DES 24 CASES SELON L'ORDRE MÉLANGÉ
+        ordreCases.forEach((jour) => {
+            const caseElement = document.createElement('div');
+            caseElement.classList.add('case');
+            caseElement.textContent = jour;
+
+            const estDejOuverte = casesOuvertes.includes(jour);
+            const estAccessible = jour <= jourMaxAutorise;
+
+            if (estDejOuverte && estAccessible) {
+                caseElement.classList.add('ouverte');
+            } else if (estAccessible) {
+                caseElement.classList.add('disponible');
+            } else {
+                caseElement.classList.add('verrouillee');
+            }
+
+            caseElement.addEventListener('click', () => {
+                if (!estAccessible) {
+                    alert(`Patience ! Il faut attendre le ${jour} décembre pour ouvrir cette case 🎅`);
+                    return;
+                }
+
+                if (!casesOuvertes.includes(jour)) {
+                    casesOuvertes.push(jour);
+                    localStorage.setItem('avent_cases_ouvertes', JSON.stringify(casesOuvertes));
+                    
+                    caseElement.classList.remove('disponible');
+                    caseElement.classList.add('ouverte');
+                }
+
+                window.open(liensCalendrier[jour], '_blank');
+            });
+
+            conteneur.appendChild(caseElement);
+        });
+    </script>
+</body>
+</html>
