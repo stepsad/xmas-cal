@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendrier de l'Avent - Lettre du Pôle Nord</title>
+    <!-- Importation des polices Google Fonts pour l'effet manuscrit et lettre ancienne -->
+    <link href="https://googleapis.com" rel="stylesheet">
+    
+    <style>
+        /* --- CONFIGURATION GÉNÉRALE --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* Fond vert sapin profond avec un dégradé chaleureux */
+            background: radial-gradient(circle at top, #1e4d3b 0%, #0d261c 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-family: 'Lora', Georgia, serif;
+            color: #2c1e16;
+            overflow-x: hidden;
+        }
+
+        /* --- EFFET DE NEIGE LÉGER EN ARRIÈRE-PLAN --- */
+        .snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(4px 4px at 100px 50px, rgba(255,255,255,0.6) 50%, transparent),
+                radial-gradient(6px 6px at 200px 150px, rgba(255,255,255,0.4) 50%, transparent),
+                radial-gradient(3px 3px at 300px 250px, rgba(255,255,255,0.7) 50%, transparent),
+                radial-gradient(5px 5px at 400px 100px, rgba(255,255,255,0.5) 50%, transparent);
+            background-size: 500px 500px;
+            animation: snow 15s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes snow {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 500px 1000px; }
+        }
+
+        /* --- LA FEUILLE DE PAPIER (LA LETTRE) --- */
+        .letter-container {
+            position: relative;
+            z-index: 1;
+            background-color: #fcf6e8; /* Couleur papier crème / parchemin */
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(235, 220, 190, 0.4));
+            max-width: 650px;
+            width: 100%;
+            padding: 50px 45px;
+            border-radius: 6px;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.5),
+                inset 0 0 40px rgba(196, 168, 120, 0.3);
+            border: 1px solid #d4af37; /* Fine bordure dorée */
+        }
+
+        /* Bordure intérieure décorative style "poste aérienne de Noël" */
+        .letter-container::before {
+            content: "";
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            border: 2px dashed #b22222; /* Rouge Noël */
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        /* --- EN-TÊTE DE LA LETTRE --- */
+        .letter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid rgba(178, 34, 34, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .sender-info {
+            font-size: 0.9rem;
+            color: #6e4f3a;
+            line-height: 1.5;
+        }
+
+        .sender-info strong {
+            font-family: 'Cinzel', serif;
+            color: #9e1b1b;
+            font-size: 1.05rem;
+            display: block;
+        }
+
+        /* Timbre postal du Pôle Nord */
+        .stamp {
+            border: 3px double #9e1b1b;
+            padding: 8px 12px;
+            text-align: center;
+            color: #9e1b1b;
+            font-family: 'Cinzel', serif;
+            transform: rotate(4deg);
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .stamp .day-number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: block;
+            line-height: 1;
+        }
+
+        .stamp .month {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* --- TITRE DU JOUR --- */
+        h1 {
+            font-family: 'Mountains of Christmas', cursive;
+            color: #9e1b1b;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 25px;
+            line-height: 1.2;
+        }
+
+        /* --- CORPS DU TEXTE --- */
+        .letter-body {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .letter-body p {
+            margin-bottom: 18px;
+        }
+
+        /* Lettrine (Première lettre majuscule décorée) */
+        .letter-body p:first-of-type::first-letter {
+            font-family: 'Mountains of Christmas', cursive;
+            font-size: 3.5rem;
+            color: #9e1b1b;
+            float: left;
+            line-height: 0.8;
+            padding-right: 10px;
+            padding-top: 4px;
+        }
+
+        /* Encadré spécial si tu mets une recette */
+        .recipe-box {
+            background-color: rgba(212, 175, 55, 0.12);
+            border-left: 4px solid #d4af37;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* --- SIGNATURE ET CACHET DE CIRE --- */
+        .letter-footer {
+            margin-top: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .signature {
+            font-family: 'Mountains of Christmas', cursive;
+            font-size: 1.6rem;
+            color: #1e4d3b;
+        }
+
+        .signature span {
+            display: block;
+            font-family: 'Lora', serif;
+            font-size: 0.85rem;
+            color: #6e4f3a;
+            font-style: italic;
+        }
+
+        /* Cachet de cire rouge */
+        .wax-seal {
+            width: 65px;
+            height: 65px;
+            background: radial-gradient(circle at 30% 30%, #d92626, #800000);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f3d27a;
+            font-family: 'Mountains of Christmas', cursive;
+            font-size: 1.8rem;
+            font-weight: bold;
+            box-shadow: 
+                2px 4px 8px rgba(0,0,0,0.4),
+                inset 0 0 10px rgba(0,0,0,0.5);
+            border: 3px solid #9e1b1b;
+            transform: rotate(-8deg);
+            user-select: none;
+        }
+
+        /* --- BOUTON DE RETOUR --- */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(178, 34, 34, 0.2);
+        }
+
+        .back-link a {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #9e1b1b;
+            color: #fcf6e8;
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(158, 27, 27, 0.3);
+        }
+
+        .back-link a:hover {
+            background-color: #1e4d3b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(30, 77, 59, 0.4);
+        }
+
+        /* --- ADAPTATION MOBILE --- */
+        @media (max-width: 600px) {
+            .letter-container {
+                padding: 35px 25px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .letter-body {
+                font-size: 1rem;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Arrière-plan neige animée -->
+    <div class="snow-container"></div>
+
+    <!-- Conteneur de la lettre -->
+    <article class="letter-container">
+        
+        <!-- En-tête avec adresse et timbre -->
+        <header class="letter-header">
+            <div class="sender-info">
+                <strong>Atelier du Père Noël</strong>
+                1, Rue des Rennes<br>
+                99999 Pôle Nord
+            </div>
+            
+            <!-- MODIFIER LE NUMÉRO DU JOUR ICI -->
+            <div class="stamp">
+                <span class="day-number">19</span>
+                <span class="month">Décembre</span>
+            </div>
+        </header>
+
+        <!-- TITRE DE L'HISTOIRE DU JOUR -->
+        <h1>L'atelier des jouets et l'histoire du Casse-Noisette</h1>
+
+        <!-- TEXTE DE L'HISTOIRE -->
+        <div class="letter-body">
+            <p>"Là où l'on fabrique les rêves des enfants", c'est la grande salle d'assemblage des jouets ! En entrant, j'ai été accueilli par une armée de Casse-Noisettes en bois.</p>
+			
+			<p>Ces figurines de soldats aux couleurs vives viennent des montagnes de l'Erzgebirge en Allemagne, au XVIIe siècle. Les mineurs, privés de travail en hiver, sculptaient le bois pour gagner leur vie. Ils ont créé ces soldats aux grandes mâchoires pour se moquer gentiment des autorités de l'époque !</p>
+
+            <!-- EXEMPLE D'ENCADRÉ (À utiliser pour les jours de recettes comme le jour 2, 8 ou 16, sinon supprimer ce bloc) -->
+            <!-- 
+            <div class="recipe-box">
+                <strong>La recette du lutin :</strong> Mélange 250g de farine, 125g de sucre...
+            </div> 
+            -->
+			
+			<p>Au pied du plus grand Casse-Noisette, j'ai vu une ombre bouger...</p>
+			
+			<p>
+				Pippin le Lutin<br>
+				Inspecteur en chef de l'atelier du 🎅
+			</p>
+		</div>
+	</article>
+
+	<script>
+		// ==========================================
+		// CONFIGURATION : Indique ici le numéro du jour (1 à 24)
+		// ==========================================
+		const JOUR_DE_LA_LETTRE = 19; 
+
+		// Récupération de la date actuelle
+		const aujourdHui = new Date();
+		const moisActuel = aujourdHui.getMonth() + 1; // Janvier = 1, Décembre = 12
+		const jourActuel = aujourdHui.getDate();
+
+		// Vérification : on bloque si on est avant décembre (mois < 12) 
+		// OU si on est en décembre mais avant le jour de la lettre
+		const estTropTot = (moisActuel < 12) || (moisActuel === 12 && jourActuel < JOUR_DE_LA_LETTRE);
+
+		if (estTropTot) {
+			// On cible le contenu de la lettre pour le remplacer par un message de blocage
+			const corpsLettre = document.querySelector('.letter-body');
+			const titreLettre = document.querySelector('h1');
+
+			if (titreLettre) {
+				titreLettre.textContent = "Halte là, petit curieux !";
+			}
+
+			if (corpsLettre) {
+				corpsLettre.innerHTML = `
+					<p style="text-align: center; font-weight: bold; color: #9e1b1b;">
+						🎄 Ho ho ho ! Pas si vite ! 🎄
+					</p>
+					<p style="text-align: center;">
+						Cette enveloppe est encore scellée par la magie de Noël. Les lutins sont toujours en train de rédiger cette histoire dans l'atelier !
+					</p>
+					<p style="text-align: center; font-style: italic;">
+						Reviens le <strong>${JOUR_DE_LA_LETTRE} décembre</strong> pour découvrir la suite de l'enquête de Pippin.
+					</p>
+				`;
+			}
+		}
+	</script>
+
+
+	
+</body>
+</html>

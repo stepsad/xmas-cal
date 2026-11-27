@@ -126,24 +126,24 @@
             4: "jour_04.html",
             5: "jour_05.html",
             6: "jour_06.html",
-            7: "jour_00.html",
-            8: "jour_00.html",
-            9: "jour_00.html",
-            10: "jour_00.html",
-            11: "jour_00.html",
-            12: "jour_00.html",
-            13: "jour_00.html",
-            14: "jour_00.html",
-            15: "jour_00.html",
-            16: "jour_00.html",
-            17: "jour_00.html",
-            18: "jour_00.html",
-            19: "jour_00.html",
-            20: "jour_00.html",
-            21: "jour_00.html",
-            22: "jour_00.html",
-            23: "jour_00.html",
-            24: "jour_00.html"
+            7: "jour_07.html",
+            8: "jour_08.html",
+            9: "jour_09.html",
+            10: "jour_10.html",
+            11: "jour_11.html",
+            12: "jour_12.html",
+            13: "jour_13.html",
+            14: "jour_14.html",
+            15: "jour_15.html",
+            16: "jour_16.html",
+            17: "jour_17.html",
+            18: "jour_18.html",
+            19: "jour_19.html",
+            20: "jour_20.html",
+            21: "jour_21.html",
+            22: "jour_22.html",
+            23: "jour_23.html",
+            24: "jour_24.html",
         };
 
         // 2. ORDRE ALÉATOIRE DES CASES
@@ -152,14 +152,12 @@
 
         // 3. GESTION DE LA DATE
         const aujourdhui = new Date();
-        const moisActuel = aujourdhui.getMonth(); // Décembre = 11
+        const moisActuel = aujourdhui.getMonth() + 1; // Décembre = 12
         const jourActuel = aujourdhui.getDate();
 
         // /!\ ASTUCE POUR TESTER AVANT DÉCEMBRE /!\
-        // Décommentez la ligne suivante pour simuler le 10 décembre :
-        const jourMaxAutorise = 10; 
-        
-        //const jourMaxAutorise = (moisActuel === 11) ? jourActuel : 0;
+        // Remplacer le numéro du mois de décembre (12) par le numéro du mois actuel.
+        const jourMaxAutorise = (moisActuel === 12) ? jourActuel : 0;
 
         // 4. MÉMOIRE DES CASES OUVERTES
         let casesOuvertes = JSON.parse(localStorage.getItem('avent_cases_ouvertes')) || [];
