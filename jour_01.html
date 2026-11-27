@@ -304,47 +304,8 @@
 			</p>
 		</div>
 	</article>
-    <!--
-	<script>
-		// ==========================================
-		// CONFIGURATION : Indique ici le numéro du jour (1 à 24)
-		// ==========================================
-		const JOUR_DE_LA_LETTRE = 1; 
-
-		// Récupération de la date actuelle
-		const aujourdHui = new Date();
-		const moisActuel = aujourdHui.getMonth() + 1; // Janvier = 1, Décembre = 12
-		const jourActuel = aujourdHui.getDate();
-
-		// Vérification : on bloque si on est avant décembre (mois < 12) 
-		// OU si on est en décembre mais avant le jour de la lettre
-		const estTropTot = (moisActuel < 12) || (moisActuel === 12 && jourActuel < JOUR_DE_LA_LETTRE);
-
-		if (estTropTot) {
-			// On cible le contenu de la lettre pour le remplacer par un message de blocage
-			const corpsLettre = document.querySelector('.letter-body');
-			const titreLettre = document.querySelector('h1');
-
-			if (titreLettre) {
-				titreLettre.textContent = "Halte là, petit curieux !";
-			}
-
-			if (corpsLettre) {
-				corpsLettre.innerHTML = `
-					<p style="text-align: center; font-weight: bold; color: #9e1b1b;">
-						🎄 Ho ho ho ! Pas si vite ! 🎄
-					</p>
-					<p style="text-align: center;">
-						Cette enveloppe est encore scellée par la magie de Noël. Les lutins sont toujours en train de rédiger cette histoire dans l'atelier !
-					</p>
-					<p style="text-align: center; font-style: italic;">
-						Reviens le <strong>${JOUR_DE_LA_LETTRE} décembre</strong> pour découvrir la suite de l'enquête de Pippin.
-					</p>
-				`;
-			}
-		}
-	</script>
-	-->
+    
+	
 
 
 	
